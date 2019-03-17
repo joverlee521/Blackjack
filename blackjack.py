@@ -192,7 +192,7 @@ def replay():
     return response == "Y"
 
 if __name__ == "__main__":
-    # Initializing the player's chips
+    # Initializing the player's chips, done outside of while loop so the player's chips doesn't get reset if player plays again
     player_chips = Chips()
     while True:
         print("Welcome to Blackjack!")
@@ -216,32 +216,45 @@ if __name__ == "__main__":
             # Asking player to hit or stand
             hit_or_stand(deck, player)
             show_hands(player, dealer)
+            # Player busts
             if player.value > 21:
                 player_busts(player_chips)
                 break
+        # Only run if the player has not already busted
         if player.value <= 21:
             print("The dealer is playing...")
+            # Deal to dealer until value reaches 17
             while dealer.value < 17:
                 hit(deck, dealer)
+            # Show all hands and run winning scenarios
             show_all(player, dealer)
+            # Dealer busts
             if dealer.value > 21:
                 dealer_busts(player_chips)
             elif dealer.value <= 21:
+                # Player got Blackjack but dealer did not
                 if player.value == 21 and dealer.value != 21:
                     player_wins(player_chips)
+                # Dealer got Blackjack but player did not
                 elif dealer.value == 21 and player.value != 21:
                     dealer_wins(player_chips)
                 else:
+                    # Dealer is closer to Blackjack than the player
                     if dealer.value > player.value:
                         dealer_wins(player_chips)
+                    # Player is closer to Blackjack than the dealer
                     elif player.value > dealer.value:
                         player_wins(player_chips)
+                    # Dealer and player have equal values(also includes if both got Blackjack)
                     elif player.value == dealer.value:
                         push(player_chips)
+        # Inform player of their chip total after win/lose
         print(player_chips)
+        # Break out of game if the player is out of chips
         if(player_chips.total == 0):
             print("You are out of chips! Goodbye!")
             break
+        # Ask player if they want to play again
         if replay():
             playing = True
         else:
