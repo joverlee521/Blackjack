@@ -68,11 +68,11 @@ def hit_or_stand(deck, hand):
     '''
     global playing
     while True:
-        player_choice = input("Hit or Stand?: ").lower()
-        if player_choice == "hit":
+        player_choice = input("Hit or Stand?(h/s): ").lower()
+        if player_choice == "h":
             hit(deck, hand)
             break
-        elif player_choice == "stand":
+        elif player_choice == "s":
             playing = False
             break
 
